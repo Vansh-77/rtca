@@ -19,6 +19,9 @@ def message(message):
     elif (message['userid']!=myuserid and message["type"]=="status"):
         print(f"{message['userid']} {message['message']}")
         print("------------------------")
+    elif (message['userid']==myuserid and message["type"]=="command"):
+        print(f"{message['message']}")
+        sio.emit("message",{"userid":myuserid,"message":"tttt","type":"rcommand"})
 
 if __name__ == "__main__":
     myuserid = input("enter your userid: ")
