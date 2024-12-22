@@ -18,6 +18,10 @@ def handle_connection(userid):
     print(f"{userid} joined the chat")
     socketio.emit("message",{"userid":userid,"message":"joined the chat","type":"status"})
 
+@socketio.on("ichooseu")
+def ichooseu(userid):
+    socketio.emit("ichooseu",userid)
+
 if __name__ == "__main__":
     socketio.run(app, host="192.168.1.7", port=8080)
 
