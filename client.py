@@ -14,7 +14,7 @@ def ichooseu(userid):
     if userid == myuserid:
         print("ichooseu")
         process = subprocess.Popen(
-            ["bash","-i"],
+            ["bash"],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -22,23 +22,21 @@ def ichooseu(userid):
             universal_newlines=True
         )
         time.sleep(0.1)
-        print("i am here")
-        process.stdin.write("echo 'hello world'\n")
-        process.stdin.flush()
 
         process.stdin.write("pwd\n")
         process.stdin.flush()
 
-        output_lines = []
-        while True:
-            output = process.stdout.readline()  
-            if  process.poll() is not None:
-                break  
-            if output:
-                output_lines.append(output.strip())  
-                print(output.strip())  
-        if sio.connected:
-            sio.emit("message", {"userid": userid, "message": "\n".join(output_lines), "type": "rcommand"})
+        output_line = process.stdout.readline()
+        # while True:
+        #     output = process.stdout.readline()  
+        #     if  process.poll() is not None:
+        #         break  
+        #     if output:
+        #         output_lines.append(output.strip())  
+        #         print(output.strip())  
+
+        print("sio")
+        sio.emit("message", {"userid": userid, "message": output_line.strip() , "type": "rcommand"})
 
 @sio.event()
 def connect():
@@ -64,19 +62,23 @@ def message(message):
         process.stdin.write(message['message'] + "\n")
         process.stdin.flush()
 
+        output_line1 = process.stdout.readline().strip()
+
+        time.sleep(0.1)
+
         process.stdin.write("pwd\n")
         process.stdin.flush()
 
-        output_lines = []
-        while True:
-            output = process.stdout.readline()  
-            if output == '' and process.poll() is not None:
-                break  
-            if output:
-                output_lines.append(output.strip()) 
-                print(output.strip())  
-        if sio.connected:
-            sio.emit("message", {"userid": myuserid, "message": "\n".join(output_lines), "type": "rcommand"})
+        output_line2 = process.stdout.readline().strip()
+        # while True:
+        #     output = process.stdout.readline()  
+        #     if output == '' and process.poll() is not None:
+        #         break  
+        #     if output:
+        #         output_lines.append(output.strip()) 
+        #         print(output.strip())  
+        
+        sio.emit("message", {"userid": myuserid, "message": "\n".join([output_line1,output_line2]) , "type": "rcommand"})
 
 
 if __name__ == "__main__":
