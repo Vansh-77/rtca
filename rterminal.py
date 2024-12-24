@@ -13,7 +13,7 @@ def disconnect():
 @sio.event()
 def message(message):
     if(message['userid']==target_userid and message['type']=="rcommand"):
-       print(f"{message["message"]}>")
+       print(f"{message["message"]}>",end = "")
     # elif (message["type"]=="status"):
     #     print(f"{message['userid']} {message['message']}")
     #     print("------------------------")
