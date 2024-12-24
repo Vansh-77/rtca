@@ -23,6 +23,7 @@ def ichooseu(userid):
     socketio.emit("ichooseu",userid)
 
 if __name__ == "__main__":
+    
     socketio.run(app, host="192.168.1.7", port=8080)
 
 
