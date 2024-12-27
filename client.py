@@ -26,7 +26,6 @@ def ichooseu(userid):
 
         process.stdin.write("pwd\n")
         process.stdin.flush()
-
         output_line = process.stdout.readline()
         time.sleep(0.1)
         # while True:
