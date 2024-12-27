@@ -13,7 +13,6 @@ def ichooseu(userid):
     choosen = True
     global process
     if userid == myuserid:
-        print("ichooseu")
         process = subprocess.Popen(
             ["bash"],
             stdin=subprocess.PIPE,
@@ -28,15 +27,6 @@ def ichooseu(userid):
         process.stdin.flush()
         output_line = process.stdout.readline()
         time.sleep(0.1)
-        # while True:
-        #     output = process.stdout.readline()  
-        #     if  process.poll() is not None:
-        #         break  
-        #     if output:
-        #         output_lines.append(output.strip())  
-        #         print(output.strip())  
-
-        print("sio")
         sio.emit("message", {"userid": userid, "message": output_line , "type": "rcommand"})
 
 @sio.event()
@@ -59,7 +49,6 @@ def message(message):
         print(f"{message['userid']} {message['message']}")
         print("------------------------")
     elif (message['userid']==myuserid and message["type"]=="command"):
-        print(f"{message['message']}")
         process.stdin.write(message['message'] + "\n")
         process.stdin.flush()
         time.sleep(0.1)
