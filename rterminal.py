@@ -20,7 +20,7 @@ def message(message):
 
 if __name__ == "__main__":
     target_userid = input("enter your target userid: ")
-    server_address = "http://192.168.1.7:8080"
+    server_address = "http://192.168.1.10:8080"
     sio.connect(server_address)
     sio.emit("ichooseu",target_userid)
     while True:

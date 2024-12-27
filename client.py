@@ -1,5 +1,6 @@
 import socketio 
 import subprocess , time
+import select
 
 sio = socketio.Client() 
 
@@ -27,6 +28,7 @@ def ichooseu(userid):
         process.stdin.flush()
 
         output_line = process.stdout.readline()
+        time.sleep(0.1)
         # while True:
         #     output = process.stdout.readline()  
         #     if  process.poll() is not None:
@@ -36,7 +38,7 @@ def ichooseu(userid):
         #         print(output.strip())  
 
         print("sio")
-        sio.emit("message", {"userid": userid, "message": output_line.strip() , "type": "rcommand"})
+        sio.emit("message", {"userid": userid, "message": output_line , "type": "rcommand"})
 
 @sio.event()
 def connect():
@@ -61,29 +63,25 @@ def message(message):
         print(f"{message['message']}")
         process.stdin.write(message['message'] + "\n")
         process.stdin.flush()
-
-        output_line1 = process.stdout.readline().strip()
-
         time.sleep(0.1)
-
         process.stdin.write("pwd\n")
         process.stdin.flush()
-
-        output_line2 = process.stdout.readline().strip()
-        # while True:
-        #     output = process.stdout.readline()  
-        #     if output == '' and process.poll() is not None:
-        #         break  
-        #     if output:
-        #         output_lines.append(output.strip()) 
-        #         print(output.strip())  
+        output_lines =[]
+        while True:
+            ready , _,_ = select.select([process.stdout],[],[],0.5)
+            if ready:
+               output = process.stdout.readline()
+               if output:
+                  output_lines.append(output.strip())
+            else:
+                break
         
-        sio.emit("message", {"userid": myuserid, "message": "\n".join([output_line1,output_line2]) , "type": "rcommand"})
+        sio.emit("message", {"userid": myuserid, "message": "\n".join(output_lines) , "type": "rcommand"})
 
 
 if __name__ == "__main__":
     myuserid = input("enter your userid: ")
-    server_address = "http://192.168.1.7:8080"
+    server_address = "http://192.168.1.10:8080"
     sio.connect(server_address)
     sio.emit("connection",myuserid)
     while True:
