@@ -73,7 +73,7 @@ if __name__ == "__main__":
     sio.connect(server_address)
     sio.emit("connection",myuserid)
     while True:
-        message = input()
+        message = input("> ")
         print("------------------------")
         json = {"userid":myuserid,"message":message,"type":"message"}
         if message == "exit":
