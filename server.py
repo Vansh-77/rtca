@@ -1,8 +1,10 @@
 from flask import Flask , render_template 
 from flask_socketio import SocketIO
+from flask_cors import CORS
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+CORS(app)
+socketio = SocketIO(app,cors_allowed_origins="*")
 
 @app.route("/")
 def home():

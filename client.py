@@ -69,7 +69,7 @@ def message(message):
 
 if __name__ == "__main__":
     myuserid = input("enter your userid: ")
-    server_address = "http://192.168.1.10:8080"
+    server_address = "wss://clichat.vercel.app"
     sio.connect(server_address)
     sio.emit("connection",myuserid)
     while True:
